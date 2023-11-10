@@ -407,3 +407,5 @@ ui-tests/.pnp.*
 data/
 
 SinEtiquetatest_cat_345.csv
+
+output_predictions.csv
