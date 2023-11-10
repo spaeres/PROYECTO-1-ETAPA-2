@@ -1,0 +1,62 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    color: #01233e; /* Cambia el color del título a azul */
+    margin: 30px 0; /* Agrega espacio arriba y abajo del título */
+}
+
+form {
+    display: inline-block;
+    text-align: left;
+    margin: 10px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+label {
+    font-weight: bold;
+    color: #333;
+    display: block;
+    margin-bottom: 5px; /* Agrega espacio después de la etiqueta */
+}
+
+input[type="text"],
+input[type="file"] {
+    width: 100%;
+    padding: 5px;
+    margin: 5px 0;
+}
+
+#results {
+    text-align: left;
+    margin: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #333;
+    border-radius: 5px;
+}
+
+#download-link {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    display: block;
+    margin-top: 10px; /* Agrega espacio entre el enlace de descarga y los resultados */
+}
+
+/* Agrega una imagen entre los formularios y el título */
+.image {
+    margin-top: 20px;
+}
+
+.image img {
+    width: 800px; /* Cambia el tamaño según tus preferencias */
+    height: auto; /* Mantiene la proporción original */
+}

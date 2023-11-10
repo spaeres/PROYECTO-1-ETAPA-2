@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Clasificación de Texto</title>
+    <link rel="stylesheet" type="text/css" href="../static/style.css" />
+  </head>
+  <body>
+    <h1>Clasificación de Texto</h1>
+
+    <div class="image">
+      <img src="imagen.png" alt="Imagen por defecto" />
+    </div>
+
+    <form id="text-form" enctype="multipart/form-data">
+      <label for="texto">Introducir Texto:</label>
+      <input type="text" id="texto" required />
+      <input type="submit" value="Clasificar Texto" />
+    </form>
+
+    <form id="csv-form" enctype="multipart/form-data">
+      <label for="archivo_csv">Subir un archivo CSV:</label>
+      <input type="file" id="archivo_csv" accept=".csv" required />
+      <input type="submit" value="Clasificar CSV" />
+    </form>
+
+    <div id="results" style="display: none">
+      <h2>Resultados:</h2>
+      <div id="result-list"></div>
+      <a id="download-link" style="display: none">Descargar Resultados</a>
+    </div>
+
+    <script>
+      function descargarArchivo() {
+        const nombreArchivo = "Predicciones_ODS.csv"; // Nombre del archivo CSV
+
+        // Crear un enlace de descarga
+        const enlaceDescarga = document.createElement("a");
+        enlaceDescarga.href = nombreArchivo;
+        enlaceDescarga.download = nombreArchivo;
+        enlaceDescarga.textContent = "Descargar CSV";
+
+        // Agregar el enlace al documento
+        document.body.appendChild(enlaceDescarga);
+      }
+      // Código JavaScript para procesar formularios y mostrar resultados
+      document
+        .getElementById("text-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const texto = document.getElementById("texto").value;
+          fetch("http://127.0.0.1:8000/predict", {
+            method: "POST",
+            body: JSON.stringify({ texto: texto }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              document.getElementById("results").style.display = "block";
+              const resultDiv = document.createElement("div");
+              resultDiv.innerHTML = `<p>${data.result}</p>`;
+              document.getElementById("result-list").appendChild(resultDiv);
+            });
+        });
+
+      document
+        .getElementById("csv-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          document.getElementById("results").style.display = "block";
+          const downloadLink = document.getElementById("download-link");
+          downloadLink.style.display = "block";
+          downloadLink.download = "resultados_clasificados.csv";
+          downloadLink.innerHTML = "Descargar Resultados";
+          // Llamar a la función para configurar el enlace de descarga
+          descargarArchivo();
+        });
+    </script>
+  </body>
+</html>
