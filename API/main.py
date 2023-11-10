@@ -1,14 +1,9 @@
-import io
-import os
-from io import StringIO, BytesIO
-from tempfile import NamedTemporaryFile
-from typing import Union
-from fastapi import FastAPI, File, UploadFile, Response, BackgroundTasks
-import csv
-import codecs
+from fastapi.responses import FileResponse
+from fastapi import FastAPI, UploadFile, File
 import pandas as pd
 import joblib
 import uvicorn
+from typing import Union
 
 from PredicitonModel import Model
 
@@ -18,6 +13,11 @@ app = FastAPI()
 @app.get("/")
 def read_root():
     return {"API": "Proyecto 1 - Etapa 2"}
+
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int, q: Union[str, None] = None):
+    return {"item_id": item_id, "q": q}
 
 
 @app.post("/predict")
@@ -55,14 +55,6 @@ async def upload_file(file: UploadFile):
         return df_json
     except Exception as e:
         return {"error": e.__str__()}
-
-
-from fastapi import FastAPI, UploadFile, File
-from fastapi.responses import FileResponse
-import pandas as pd
-import joblib
-
-app = FastAPI()
 
 
 @app.post("/predict-otro")
