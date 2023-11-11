@@ -30,58 +30,72 @@
     </div>
 
     <script>
-      document.getElementById("text-form").addEventListener("submit", function (e) {
-        e.preventDefault();
-        const texto = document.getElementById("texto").value;
-        fetch("http://127.0.0.1:8000/predict", {
-          method: "POST",
-          body: new URLSearchParams({ texto: texto }),
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            document.getElementById("results").style.display = "block";
-            const resultDiv = document.createElement("div");
-            resultDiv.innerHTML = `<p>${data.result}</p>`;
-            document.getElementById("result-list").appendChild(resultDiv);
-          });
-      });
-
-      document.getElementById("csv-form").addEventListener("submit", function (e) {
-        e.preventDefault();
-        const formData = new FormData();
-        formData.append("file", document.getElementById("archivo_csv").files[0]);
-
-        fetch("http://127.0.0.1:8000/predict-otro", {
-          method: "POST",
-          body: formData,
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.blob();
+      document
+        .getElementById("text-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const texto = document.getElementById("texto").value;
+          fetch("http://127.0.0.1:8000/predict", {
+            method: "POST",
+            body: new URLSearchParams({ texto: texto }),
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
           })
-          .then((blob) => {
-            const url = URL.createObjectURL(blob);
+            .then((response) => response.json())
+            .then((data) => {
+              document.getElementById("results").style.display = "block";
+              const resultDiv = document.createElement("div");
+              resultDiv.innerHTML = `<p>${data.result}</p>`;
+              document.getElementById("result-list").appendChild(resultDiv);
+            });
+        });
 
-            // Create a link and trigger the download
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "resultados_clasificados.csv";
-            a.click();
+      document
+        .getElementById("csv-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
 
-            // Clean up: revoke the URL
-            URL.revokeObjectURL(url);
-          })
-          .catch((error) => {
-            console.error("Error during file download:", error);
-          });
-      });
+          //var myHeaders = new Headers();
+          //myHeaders.append("Content-Type", "text/csv");
+
+          const formData = new FormData();
+          formData.append(
+            "file",
+            document.getElementById("archivo_csv").files[0]
+          );
+
+          console.log(document.getElementById("archivo_csv").files[0]);
+
+          var requestOptions = {
+            method: "POST",
+            body: formData,
+            redirect: "follow",
+          };
+
+          fetch("http://localhost:8000/predict", requestOptions)
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+              return response.blob();
+            })
+            .then((blob) => {
+              const url = URL.createObjectURL(blob);
+
+              // Create a link and trigger the download
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = "resultados_clasificados.csv";
+              a.click();
+
+              // Clean up: revoke the URL
+              URL.revokeObjectURL(url);
+            })
+            .catch((error) => {
+              console.error("Error during file download:", error);
+            });
+        });
     </script>
   </body>
 </html>
-
-
